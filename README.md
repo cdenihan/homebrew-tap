@@ -11,7 +11,9 @@ brew install cdenihan/tap/zenc
 zc --version
 ```
 
-The formula installs `zc.com` as `zc` and the upstream `zc-boot.com` bootstrap tool as `zc-boot`. The release does not contain a `zc-init` executable. Running `zc-boot` downloads additional tools, as defined by its embedded bootstrap script. A C compiler such as Apple's Clang is needed when building Zen C programs. The standard library is embedded in the release binary.
+The formula installs the official release's `zc.com` as `zc` and `zc-boot.com` as `zc-boot`. The release has no `zc-init` executable. For ordinary development, use `zc build hello.zc -o hello`; Apple's Clang provides the C backend. The release binary embeds the Zen C standard library.
+
+`zc-boot` is a separate portable hello-world bootstrap. It creates `hello.zc`, a `Makefile`, and a roughly 1.8 GB project-local `usr/` toolchain. Its bundled instructions say to run `usr/bin/make`, then `out/hello.com`. Running macOS's `make` can fail to launch its local APE compiler. The bootstrap script currently fetches `zc.com` from `OEvgeny/zc-ape` (which reports Zen C 0.1.0 in the current release) and a floating `cosmocc.zip`; these are separate from the Brew-installed Zen C version. It skips existing downloads, so `brew upgrade zenc` and rerunning `zc-boot` do not update a bootstrapped project's toolchain. For the portable example with Brew's current `zc`, run `make ZC=zc` after bootstrapping.
 
 The [update workflow](.github/workflows/update-zenc.yml) checks GitHub Releases daily and on manual dispatch. When a newer stable release has `zc.com` and `zc-boot.com` assets with SHA-256 digests, it updates the formula, installs and tests it on macOS, then commits the change. A changed checksum for an existing release fails the update instead of silently replacing the binary.
 

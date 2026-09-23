@@ -25,6 +25,20 @@ class Zenc < Formula
     end
   end
 
+  def caveats
+    <<~EOS
+      For normal projects, use `zc build file.zc`; a C compiler such as Clang
+      is also required. `zc-boot` creates a separate, project-local portable
+      example under the current directory. Build that example with
+      `usr/bin/make`, as its bundled instructions specify.
+
+      The bootstrap currently downloads its own `zc.com` from OEvgeny/zc-ape
+      and an unpinned `cosmocc.zip`. Homebrew does not update those project-local
+      files. To use this Homebrew release's compiler with the local cosmocc
+      toolchain, run `make ZC=zc` inside the bootstrapped directory.
+    EOS
+  end
+
   test do
     assert_match "zc v#{version}", shell_output("#{bin}/zc --version")
     assert_predicate bin/"zc-boot", :executable?
