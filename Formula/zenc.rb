@@ -27,7 +27,7 @@ class Zenc < Formula
 
   test do
     assert_match "zc v#{version}", shell_output("#{bin}/zc --version")
-    assert (bin/"zc-boot").executable?
+    assert_predicate bin/"zc-boot", :executable?
     (testpath/"hello.zc").write <<~ZC
       fn main() {
         println "hello from Zen C";
