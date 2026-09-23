@@ -9,6 +9,7 @@ class Zenc < Formula
 
   def install
     bin.install "zc.com" => "zc"
+    chmod 0755, bin/"zc"
   end
 
   test do
