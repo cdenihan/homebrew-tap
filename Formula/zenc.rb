@@ -5,12 +5,12 @@ class Zenc < Formula
   sha256 "e6f7a91321daacadc838e709f734fa3a039ed1a545e63d2b911949c4fa02eed0"
   license "MIT"
 
+  depends_on :macos
+
   resource "zc-boot" do
     url "https://github.com/zenc-lang/zenc/releases/download/v0.4.4/zc-boot.com"
     sha256 "2fe1d2857df506053054004991574a9e712d87a351e848bc3b0367584688c53e"
   end
-
-  depends_on :macos
 
   # Homebrew cannot identify the APE binary as executable during cleanup.
   skip_clean "bin/zc", "bin/zc-boot"
