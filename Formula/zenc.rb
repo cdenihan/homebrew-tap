@@ -7,6 +7,9 @@ class Zenc < Formula
 
   depends_on :macos
 
+  # Homebrew cannot identify the APE binary as executable during cleanup.
+  skip_clean "bin/zc"
+
   def install
     chmod 0755, "zc.com"
     bin.install "zc.com" => "zc"
