@@ -1,0 +1,44 @@
+name: Update cosmocc
+
+on:
+  schedule:
+    - cron: "31 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tap-updates
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update formula from the latest GitHub release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/update_cosmocc.py
+      - name: Verify changed formula
+        id: changed
+        run: |
+          if git diff --quiet -- Formula/cosmocc.rb; then
+            echo "updated=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "updated=true" >> "$GITHUB_OUTPUT"
+            brew tap cdenihan/tap "$GITHUB_WORKSPACE"
+            cp Formula/cosmocc.rb "$(brew --repository cdenihan/tap)/Formula/cosmocc.rb"
+            brew audit --strict cdenihan/tap/cosmocc
+            brew install cdenihan/tap/cosmocc
+            brew test cdenihan/tap/cosmocc
+          fi
+      - name: Commit update
+        if: steps.changed.outputs.updated == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Formula/cosmocc.rb
+          git commit -m "Update cosmocc formula"
+          git push
