@@ -8,8 +8,8 @@ class Zenc < Formula
   depends_on :macos
 
   def install
+    chmod 0755, "zc.com"
     bin.install "zc.com" => "zc"
-    chmod 0755, bin/"zc"
   end
 
   test do
