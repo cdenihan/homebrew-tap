@@ -1,8 +1,8 @@
-name: Update Zen C
+name: Update XFER
 
 on:
   schedule:
-    - cron: "17 9 * * *"
+    - cron: "37 9 * * *"
   workflow_dispatch:
 
 permissions:
@@ -20,25 +20,25 @@ jobs:
       - name: Update formula from the latest GitHub release
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: python3 scripts/update_zenc.py
+        run: python3 scripts/update_xfer.py
       - name: Verify changed formula
         id: changed
         run: |
-          if git diff --quiet -- Formula/zenc.rb; then
+          if git diff --quiet -- Formula/xfer.rb; then
             echo "updated=false" >> "$GITHUB_OUTPUT"
           else
             echo "updated=true" >> "$GITHUB_OUTPUT"
             brew tap cdenihan/tap "$GITHUB_WORKSPACE"
-            cp Formula/zenc.rb "$(brew --repository cdenihan/tap)/Formula/zenc.rb"
-            brew audit --strict cdenihan/tap/zenc
-            brew install cdenihan/tap/zenc
-            brew test cdenihan/tap/zenc
+            cp Formula/xfer.rb "$(brew --repository cdenihan/tap)/Formula/xfer.rb"
+            brew audit --strict cdenihan/tap/xfer
+            brew install cdenihan/tap/xfer
+            brew test cdenihan/tap/xfer
           fi
       - name: Commit update
         if: steps.changed.outputs.updated == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add Formula/zenc.rb
-          git commit -m "Update Zen C formula"
+          git add Formula/xfer.rb
+          git commit -m "Update XFER formula"
           git push
