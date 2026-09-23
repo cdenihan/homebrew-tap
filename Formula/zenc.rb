@@ -1,8 +1,7 @@
 class Zenc < Formula
-  desc "Zen C compiler"
+  desc "Systems language compiling to readable C"
   homepage "https://www.zenc-lang.org/"
   url "https://github.com/zenc-lang/zenc/releases/download/v0.4.4/zc.com"
-  version "0.4.4"
   sha256 "e6f7a91321daacadc838e709f734fa3a039ed1a545e63d2b911949c4fa02eed0"
   license "MIT"
 

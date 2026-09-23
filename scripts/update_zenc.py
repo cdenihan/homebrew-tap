@@ -50,7 +50,6 @@ def main() -> None:
         return
 
     formula = formula.replace(old_tag.group(0), f'  url "{url}"', 1)
-    formula = re.sub(r'^  version "[0-9.]+"$', f'  version "{tag[1:]}"', formula, count=1, flags=re.M)
     formula = formula.replace(old_sha.group(0), f'  sha256 "{digest.removeprefix("sha256:")}"', 1)
     FORMULA.write_text(formula)
     print(f"Updated Zen C from {current} to {tag}")
