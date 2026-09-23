@@ -7,13 +7,13 @@ class Zenc < Formula
 
   depends_on :macos
 
+  # Homebrew cannot identify the APE binaries as executable during cleanup.
+  skip_clean "bin/zc", "bin/zc-boot"
+
   resource "zc-boot" do
     url "https://github.com/zenc-lang/zenc/releases/download/v0.4.4/zc-boot.com"
     sha256 "2fe1d2857df506053054004991574a9e712d87a351e848bc3b0367584688c53e"
   end
-
-  # Homebrew cannot identify the APE binary as executable during cleanup.
-  skip_clean "bin/zc", "bin/zc-boot"
 
   def install
     chmod 0755, "zc.com"
@@ -27,6 +27,7 @@ class Zenc < Formula
 
   test do
     assert_match "zc v#{version}", shell_output("#{bin}/zc --version")
+    assert (bin/"zc-boot").executable?
     (testpath/"hello.zc").write <<~ZC
       fn main() {
         println "hello from Zen C";
