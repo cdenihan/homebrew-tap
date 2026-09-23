@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   update:
-    runs-on: macos-14
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
       - name: Update formula from the latest GitHub release
@@ -28,8 +28,11 @@ jobs:
             echo "updated=false" >> "$GITHUB_OUTPUT"
           else
             echo "updated=true" >> "$GITHUB_OUTPUT"
-            brew install --formula ./Formula/zenc.rb
-            brew test ./Formula/zenc.rb
+            brew tap cdenihan/tap "$GITHUB_WORKSPACE"
+            cp Formula/zenc.rb "$(brew --repository cdenihan/tap)/Formula/zenc.rb"
+            brew audit --strict cdenihan/tap/zenc
+            brew install cdenihan/tap/zenc
+            brew test cdenihan/tap/zenc
           fi
       - name: Commit update
         if: steps.changed.outputs.updated == 'true'
