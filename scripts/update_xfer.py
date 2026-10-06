@@ -21,7 +21,7 @@ def main() -> None:
         release = json.load(response)
 
     tag = release["tag_name"]
-    if not re.fullmatch(r"v[0-9]+(?:\.[0-9]+){3}", tag):
+    if not re.fullmatch(r"v[0-9]+(?:\.[0-9]+){2,3}", tag):
         raise ValueError(f"Unexpected release tag: {tag!r}")
 
     digests = {}
@@ -54,7 +54,7 @@ def main() -> None:
     current = current_tags["VERSION"]
     old_version = tuple(map(int, current[1:].split(".")))
     new_version = tuple(map(int, tag[1:].split(".")))
-    if new_version < old_version:
+    if len(new_version) == len(old_version) and new_version < old_version:
         raise ValueError(f"Latest release {tag} is older than formula release {current}")
     if new_version == old_version:
         if current_digests != digests:
