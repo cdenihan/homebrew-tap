@@ -20,7 +20,7 @@ class Xfer < Formula
 
   def install
     resource("binary").stage do
-      binary = Dir["xfer-macos-*"].fetch(0)
+      binary = Dir["xfer", "xfer-macos-*"].fetch(0)
       chmod 0755, binary
       bin.install binary => "xfer"
     end
